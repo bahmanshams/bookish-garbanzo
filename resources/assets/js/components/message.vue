@@ -1,24 +1,23 @@
 <template>
-    <!--<div class="container">-->
-        <!--<div class="row justify-content-center">-->
-            <!--<div class="col-md-8">-->
-                <!--<div class="card card-default">-->
-                    <!--<div class="card-header">Example Component</div>-->
-
-                    <!--<div class="card-body">-->
-                        <!--I'm an example component.-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-
+    <div>
+        <li class="list-group-item" :class="className"><slot></slot></li>
+        <small class="badge float-right" :class="badgeClass">You</small>
+    </div>
 </template>
 
 <script>
     export default {
+        props:[
+            'color'
+        ],
+        computed:{
+            className(){
+                return 'list-group-item-' + this.color;
+            },
+            badgeClass(){
+                return 'badge-' + this.color;
+            }
+        },
         mounted() {
             console.log('Component mounted.')
         }
