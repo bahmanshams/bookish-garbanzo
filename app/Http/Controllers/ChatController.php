@@ -1,11 +1,10 @@
-<?php
+<?php namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
-use App\User;
 use App\Events\ChatEvent;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 /**
  * Class ChatController
@@ -24,7 +23,7 @@ class ChatController extends Controller
 
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
     public function chat()
     {
@@ -33,21 +32,39 @@ class ChatController extends Controller
 
 
     /**
+     * Send message
      * @param Request $request
      */
     public function send(request $request)
     {
         $user = User::find(Auth::id());
+
         $this->saveToSession($request);
+
         event(new ChatEvent($request->message, $user));
     }
 
 
     /**
-     * @param $request
+     * Save to session
+     * @param Request $request
      */
-    public function saveToSession($request)
+    public function saveToSession(request $request)
     {
-        session()->put('chat', $request->message);
+        session()->put('chat', $request->chat);
+    }
+
+    public function getOldMessage()
+    {
+        return session('chat');
+    }
+
+
+    /**
+     * Delete Session
+     */
+    public function deleteSession()
+    {
+        session()->forget('chat');
     }
 }
